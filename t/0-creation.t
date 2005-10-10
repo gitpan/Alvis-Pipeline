@@ -1,4 +1,4 @@
-# $Id: 0-creation.t,v 1.5 2005/10/03 12:29:17 mike Exp $
+# $Id: 0-creation.t,v 1.6 2005/10/10 14:16:15 mike Exp $
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl 0-creation.t'
@@ -9,7 +9,7 @@ use strict;
 use warnings;
 
 # change 'tests => 1' to 'tests => last_test_to_print';
-use Test::More tests => 9;
+use Test::More tests => 8;
 
 BEGIN { use_ok('Alvis::Pipeline') }
 
@@ -54,6 +54,7 @@ eval { $pipe = new Alvis::Pipeline::Write(host => "localhost",
 ok(!defined $pipe && defined $@ && $@ =~ /Connection refused/,
    "Write-pipe creation with no listener on port is refused");
 
+if (0) {
 ### This won't pass on machines with no web-server
 eval { $pipe = new Alvis::Pipeline::Write(host => "localhost",
 					  port => 80) };
@@ -61,3 +62,4 @@ ok(defined $pipe,
    "Write-pipe creation with host and port=80 is accepted");
 $pipe->close();
 $pipe = undef;
+}

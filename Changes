@@ -1,6 +1,11 @@
-$Id: Changes,v 1.8 2005/10/03 13:15:58 mike Exp $
+$Id: Changes,v 1.9 2005/10/10 14:19:30 mike Exp $
 
 Revision history for Perl extension Alvis::Pipeline.
+
+0.05  Mon Oct 10 15:18:29 BST 2005
+	- Remove a test from t/0-creation.t that required a listening
+	  server on localhost port 80 -- too many people inexplicably
+	  do not run web servers :-)
 
 0.04  Mon Oct  3 14:14:43 BST 2005
 	- Total rewrite, not using OAI.  Much simpler and more reliable.
