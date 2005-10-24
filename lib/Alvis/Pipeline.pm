@@ -1,4 +1,4 @@
-# $Id: Pipeline.pm,v 1.17 2005/10/10 14:18:50 mike Exp $
+# $Id: Pipeline.pm,v 1.18 2005/10/24 14:26:40 mike Exp $
 
 package Alvis::Pipeline;
 
@@ -10,7 +10,7 @@ use Alvis::Logger;
 use Alvis::Pipeline::Read;
 use Alvis::Pipeline::Write;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 
 =head1 NAME

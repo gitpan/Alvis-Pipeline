@@ -1,6 +1,11 @@
-$Id: Changes,v 1.9 2005/10/10 14:19:30 mike Exp $
+$Id: Changes,v 1.10 2005/10/24 14:26:26 mike Exp $
 
 Revision history for Perl extension Alvis::Pipeline.
+
+0.06  Mon Oct 24 15:25:32 BST 2005
+	- Both Read and Write pipes are now Unicode-clean, along with
+	  the the temporary files spooled by the background reader.
+	- New test-script t/2-unicode.t.
 
 0.05  Mon Oct 10 15:18:29 BST 2005
 	- Remove a test from t/0-creation.t that required a listening

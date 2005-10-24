@@ -16,4 +16,5 @@ lib/Alvis/Pipeline/Read.pm
 lib/Alvis/Pipeline/Write.pm
 t/0-creation.t
 t/1-read.t
+t/2-unicode.t
 META.yml                                 Module meta-data (added by MakeMaker)

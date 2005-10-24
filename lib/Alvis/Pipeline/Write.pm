@@ -1,4 +1,4 @@
-# $Id: Write.pm,v 1.6 2005/09/30 16:48:24 mike Exp $
+# $Id: Write.pm,v 1.7 2005/10/24 14:02:44 mike Exp $
 
 package Alvis::Pipeline::Write;
 use vars qw(@ISA);
@@ -25,6 +25,7 @@ sub new {
 	or die("can't connect to '" . $this->{host} . "', ",
 	       "port '" . $this->{port} . "': $!");
 
+    binmode $this->{socket}, ":utf8";
     return $this;
 }
 

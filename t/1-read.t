@@ -1,25 +1,13 @@
-# $Id: 1-read.t,v 1.5 2005/10/03 13:14:33 mike Exp $
-
-# Before `make install' is performed this script should be runnable with
-# `make test'. After `make install' it should work as `perl 1-read.t'
-
-#########################
+# $Id: 1-read.t,v 1.6 2005/10/24 12:33:47 mike Exp $
 
 use strict;
 use warnings;
-use Errno qw(EINVAL ENOENT);
 
-# change 'tests => 1' to 'tests => last_test_to_print';
 use vars qw($ndocs);
 BEGIN { $ndocs = 10 } # must be an even number
 use Test::More tests => 3+$ndocs;
 
 BEGIN { use_ok('Alvis::Pipeline') }
-
-#########################
-
-# Insert your test code below, the Test::More module is use()ed here so read
-# its man page ( perldoc Test::More ) for help writing this test script.
 
 my $spooldir = "/tmp/xyzzy";
 my $port = 31802;

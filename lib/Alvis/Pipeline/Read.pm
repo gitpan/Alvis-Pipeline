@@ -1,4 +1,4 @@
-# $Id: Read.pm,v 1.10 2005/10/03 13:13:53 mike Exp $
+# $Id: Read.pm,v 1.11 2005/10/24 14:04:36 mike Exp $
 
 package Alvis::Pipeline::Read;
 use vars qw(@ISA);
@@ -61,6 +61,7 @@ sub read {
     my $filename = "$dir/$lastread";
     my $f2 = new IO::File("<$filename")
 	or die "can't read file '$filename': $!";
+    binmode $f2, ":utf8";
     my $doc = join("", <$f2>);
     $f2->close();
     unlink($filename);
@@ -108,6 +109,7 @@ sub _start_server {
 	$this->{socket} = $listener->accept()
 	    or die "can't accept connection: $!";
 
+	binmode $this->{socket}, ":utf8";
 	$this->log(1, "started background process, pid $$");
 	while (1) {
 	    my $doc = $this->_read();
@@ -154,6 +156,7 @@ sub _store_file {
     my $filename = "$dir/$lastwrite";
     my $f2 = new IO::File(">$filename")
 	or die "can't create new file '$filename': $!";
+    binmode $f2, ":utf8";
     $f2->print($doc) or die "can't write '$filename': $!";
     $f2->close() or die "can't close '$filename': $!";
 
