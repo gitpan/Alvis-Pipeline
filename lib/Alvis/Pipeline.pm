@@ -1,4 +1,4 @@
-# $Id: Pipeline.pm,v 1.18 2005/10/24 14:26:40 mike Exp $
+# $Id: Pipeline.pm,v 1.19 2005/11/22 14:57:24 mike Exp $
 
 package Alvis::Pipeline;
 
@@ -10,7 +10,7 @@ use Alvis::Logger;
 use Alvis::Pipeline::Read;
 use Alvis::Pipeline::Write;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 
 =head1 NAME
@@ -104,6 +104,20 @@ Once a document has been read in this way, it will no longer be
 available for subsequent C<read()>s, so a sequence of C<read()> calls
 will read all the available records one at a time.
 
+Once a document has been read, it is the responsibility of the reader
+to process it and pass it on to the next component in the pipeline.
+If something catastrophic happens, and the record is lost, then an
+out-of-band mechanism may be used to request a new copy of the record
+from the writer.  The C<Alvis::Pipeline> module does not directly
+support such requests; they are considered to be application-level and
+therefore not appropriate for this low-level module to deal with.
+
+(As a matter of application design, we offer the observation that, in
+Alvis, the C<<id>> attribute on the top-level element specifies the
+identity of the record, and should remain changed even if the record
+itself is updated; so any out-of-band request for records to be
+re-sent should do so by specifying the IDs of the required records.)
+
 =head2 write()
 
  # Write-pipes only
@@ -113,6 +127,11 @@ Writes an XML document to the specified outbound pipe.  The document
 may be passed in either as a DOM tree (C<XML::LibXML::Element>) or a
 string containing the text of the document.  Throws an exception if an
 error occurs.
+
+This method returns only when the record has been successfully
+transferred to the receiver at the other end of the pipeline; so the
+sender is then able to forget about the transferred, which is now the
+responsibility of the next component in the pipeline.
 
 =head2 close()
 
