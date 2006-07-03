@@ -1,6 +1,15 @@
-$Id: Changes,v 1.11 2005/11/22 15:05:45 mike Exp $
+$Id: Changes,v 1.13 2006/07/03 11:21:37 mike Exp $
 
 Revision history for Perl extension Alvis::Pipeline.
+
+0.08  Mon Jul  3 12:22:11 BST 2006
+	- Fix documentation of Alvis::Pipeline::Read->read(), which in
+	  fact returns a string containing the XML document rather
+	  than a DOM tree as previously claimed.
+	- Fix sample code accordingly.
+	- Add documentation of the pipeline protocol, to facilitate
+	  the development of indepedent implementations in other
+	  languages.
 
 0.07  Tue Nov 22 15:05:30 GMT 2005
 	- Add notes to the documentation about record identity and

@@ -1,4 +1,4 @@
-# $Id: Pipeline.pm,v 1.19 2005/11/22 14:57:24 mike Exp $
+# $Id: Pipeline.pm,v 1.20 2006/01/24 23:44:24 mike Exp $
 
 package Alvis::Pipeline;
 
@@ -10,7 +10,7 @@ use Alvis::Logger;
 use Alvis::Pipeline::Read;
 use Alvis::Pipeline::Write;
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 
 =head1 NAME
@@ -24,8 +24,8 @@ Alvis::Pipeline - Perl extension for passing XML documents along the Alvis pipel
                                  port => 16716,
                                  spooldir => "/home/alvis/spool");
  $out = new Alvis::Pipeline::Write(port => 29168);
- while ($xmlDOM = $in->read(1)) {
-     $transformed = process($xmlDOM);
+ while ($xml = $in->read(1)) {
+     $transformed = process($xml);
      $out->write($transformed);
  }
 
@@ -49,6 +49,9 @@ Documents.  However, while this is the motivating example pipeline
 that led to the creation of this module, there is no reason why other
 kinds of documents should not also be passed through pipeline using
 this software.
+
+The pipeline protocol is described below, to facilitate the
+development of indepedent implementations in other languages.
 
 =head1 METHODS
 
@@ -92,10 +95,10 @@ value.
 =head2 read()
 
  # Read-pipes only
- $xmlDOM = $in->read($block);
+ $xml = $in->read($block);
 
-Reads an XML document from the specified inbound pipe, and returns a
-DOM tree representing it.  If there is no document ready to read, it
+Reads an XML document from the specified inbound pipe, and returns it
+as a string.  If there is no document ready to read, it
 either returns an undefined value (if no argment is provided, or if
 the argument is false) or blocks if the argument is provided and true.
 C<read()> throws an exception if an error occurs.
@@ -140,6 +143,66 @@ responsibility of the next component in the pipeline.
 Closes a pipe, after which no further reading or writing may be done
 on it.  This is important for read-pipes, as it frees up the Internet
 port that the server is listening on.
+
+=head1 PIPELINE PROTOCOL
+
+Because the pipeline is unidirectional, it is very simple: there is no
+back-channel by which a downstream component can talk to an upstream
+one, and the protocol consists entirely of wrappings for the documents
+that are sent downstream.
+
+Each document packet consists of the following, in order:
+
+=over 4
+
+=item 1
+
+The magic literal string C<Alvis::Pipeline>,
+followed by a single newline character.
+
+=item 2
+
+Decimal-rendered protocol version-number (currently 1),
+followed by a single newline character.
+
+=item 3
+
+Decimal-rendered integer byte-count,
+followed by a single newline character.
+Note that the protocol counts I<bytes> rather than
+I<characters>: these two counts can be different when
+non-ASCII character sets such as UTF-8 are used.
+
+=item 4
+
+The XML document itself (or other binary object),
+of the length specified.
+
+=item 5
+
+The magic literal string C<--end-->,
+followed by a single newline character.
+
+=back
+
+For example, the simple document
+
+	<dinosaur type="sauropod">
+	  Brachiosaurus
+	</dinosaur>
+
+would be sent as the following packet:
+
+	Alvis::Pipeline
+	1
+	55
+	<dinosaur type="sauropod">
+	  Brachiosaurus
+	</dinosaur>
+	---end--
+
+This packaging allows the downstream component to locate object
+boundaries and to consistency-check the stream.
 
 =head1 SEE ALSO
 
