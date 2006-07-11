@@ -1,4 +1,4 @@
-# $Id: 2-unicode.t,v 1.1 2005/10/24 14:27:02 mike Exp $
+# $Id: 2-unicode.t,v 1.2 2006/07/11 10:38:01 mike Exp $
 
 use strict;
 use warnings;
@@ -40,7 +40,7 @@ my $pipe = new Alvis::Pipeline::Read(spooldir => $spooldir, port => $port,
     or die "can't make read-pipe with spooldir='$spooldir', port='$port': $!";
 
 # It's very, very stupid that we have to do this.
-binmode Test::Builder->output(), ":utf8";
+binmode Test::Builder::new()->output(), ":utf8";
 
 for my $i (1..$ndocs) {
     my $doc = $pipe->read(1);

@@ -7,7 +7,9 @@ README
 bin/README
 bin/alvis-pipeline-filter.pl
 bin/alvis-pipeline-get.pl
+bin/alvis-pipeline-put-documents.pl
 bin/alvis-pipeline-put.pl
+bin/alvis-zsink.pl
 etc/db/alvis.xml
 etc/db/xml-core.xml
 lib/Alvis/Logger.pm

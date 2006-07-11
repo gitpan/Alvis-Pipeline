@@ -1,6 +1,16 @@
-$Id: Changes,v 1.13 2006/07/03 11:21:37 mike Exp $
+$Id: Changes,v 1.14 2006/07/11 10:38:20 mike Exp $
 
 Revision history for Perl extension Alvis::Pipeline.
+
+0.09  Tue Jul 11 11:38:32 BST 2006
+	- Add two additional programs to the "bin" directory:
+	  alvis-pipeline-put-documents.pl -- similar to the existing
+		alvis-pipeline-put.pl, but instead of generating a
+		sequence of documents, feeds nominated files down the
+		pipeline.
+	  alvis-zsink.pl -- acts as a sink on the end of a pipeline,
+		feeding the received documents to a Z39.50 server such
+		as Zebra.
 
 0.08  Mon Jul  3 12:22:11 BST 2006
 	- Fix documentation of Alvis::Pipeline::Read->read(), which in

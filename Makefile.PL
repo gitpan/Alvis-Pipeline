@@ -1,4 +1,4 @@
-# $Id: Makefile.PL,v 1.8 2005/09/19 12:07:58 mike Exp $
+# $Id: Makefile.PL,v 1.9 2006/07/11 10:37:20 mike Exp $
 
 use 5.008;
 use ExtUtils::MakeMaker;
@@ -13,6 +13,8 @@ WriteMakefile(
       (ABSTRACT_FROM  => 'lib/Alvis/Pipeline.pm', # retrieve abstract from module
        AUTHOR         => 'Mike Taylor <mike@indexdata.com>') : ()),
     EXE_FILES    => [ 'bin/alvis-pipeline-put.pl',
+		      'bin/alvis-pipeline-put-documents.pl',
 		      'bin/alvis-pipeline-filter.pl',
-		      'bin/alvis-pipeline-get.pl' ],
+		      'bin/alvis-pipeline-get.pl',
+		      'bin/alvis-zsink.pl' ],
 );
