@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# $Id: alvis-zsink.pl,v 1.1 2006/07/11 10:36:49 mike Exp $
+# $Id: alvis-zsink.pl,v 1.2 2006/08/14 18:00:32 mike Exp $
 #
 # This is an Alvis Sink -- that is, a program that sits at the end of
 # an Alvis pipeline absorbing documents that are fed to it from an
@@ -41,24 +41,51 @@ $options->option(user => $user) if defined $user;
 $options->option(password => $password) if defined $password;
 my $conn = create ZOOM::Connection($options);
 $conn->connect($zhost);
+print "connected: waiting for documents\n";
 
 my $n = 0;
 $| = 1;
 while (my $xml = $pipe->read(1)) {
     print "got document ", ++$n, " ... ";
-    my $p = $conn->package();
-    $p->option(action => "specialUpdate");
-    $p->option(record => $xml);
-    # Could set "recordIdOpaque" if we had a record-ID
-    $p->send("update");
-    print "sent package ... ";
-    $p->destroy();
 
-    sleep 1;
-    $p = $conn->package();
-    $p->option(action => "commit");
-    $p->send("commit");
-    print "commit ... ";
+  AGAIN:
+    eval {
+	my $p = $conn->package();
+	$p->option(action => "specialUpdate");
+	$p->option(record => $xml);
+	# Could set "recordIdOpaque" if we had a record-ID
+	$p->send("update");
+	print "sent package ... ";
+	$p->destroy();
 
-    print STDERR "added document\n";
+	sleep 1;
+	$p = $conn->package();
+	$p->option(action => "commit");
+	$p->send("commit");
+	print "commit ... ";
+    };
+
+    if (!$@) {
+	print STDERR "added document\n";
+	next;
+    } elsif (!ref $@ || !$@->isa("ZOOM::Exception")) {
+	# A non-ZOOM error, which is totally unexepected.  Treat this
+	# as fatal: we need to shut the read-pipe down properly so
+	# that the spooling child process is killed.
+	$pipe->close();
+	die $@;
+    } elsif ($@->diagset() ne "ZOOM" ||
+	     $@->code() != ZOOM::Error::CONNECTION_LOST) {
+	# A ZOOM error other than connection lost, e.g. BIB-1 224,
+	# "ES: immediate execution failed".  Most such cases need not
+	# be treated as fatal, so we just log it and continue.
+	warn "$@\n";
+    } else {
+	# Connection lost, most likely because Zebra got bored and
+	# timed it out.  Re-forge the connection and try again.
+	warn "ZOOM connection lost (probably due to timeout): re-forging\n";
+	create ZOOM::Connection($options);
+	$conn->connect($zhost);
+	goto AGAIN;
+    }
 }

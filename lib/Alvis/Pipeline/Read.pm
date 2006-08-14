@@ -1,4 +1,4 @@
-# $Id: Read.pm,v 1.11 2005/10/24 14:04:36 mike Exp $
+# $Id: Read.pm,v 1.12 2006/08/14 17:24:04 mike Exp $
 
 package Alvis::Pipeline::Read;
 use vars qw(@ISA);
@@ -33,7 +33,8 @@ sub new {
 	die "_start_server() returned!  It should never do that";
     }
 
-    # Automatic reaper prevents the child going zombie when we kill it
+    # Automatic reaper prevents the child going zombie when we kill
+    # it.  (Yes, "IGNORE" has a special-case meaning for SIGCHLD.)
     $SIG{CHLD} = 'IGNORE';
 
     $this->{pid} = $pid;

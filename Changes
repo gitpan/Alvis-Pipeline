@@ -1,6 +1,24 @@
-$Id: Changes,v 1.14 2006/07/11 10:38:20 mike Exp $
+$Id: Changes,v 1.15 2006/08/14 18:04:04 mike Exp $
 
 Revision history for Perl extension Alvis::Pipeline.
+
+0.10  Mon Aug 14 19:01:55 BST 2006
+	- No significant changes to the library, but a major reworking
+	  of the error-handing in zsink.pl:
+	  * Unrecoverable errors now cause the zsink to be closed down
+	    neatly, so that the spooling child process doesn't hang
+	    around getting in the way when we try to re-start.
+	  * ZOOM errors pertaining to a particular operation
+	    (i.e. nine times out of ten, it's Zebra refusing to add a
+	    wrongly-formatted record) are logged, but the zsink
+	    continues to operate.
+	  * The CONNECTION_LOST error, which occurs most often when
+	    Zebra gets bored with inactivity and closes the socket,
+	    causes an attempt to re-forge the connection.  This will
+	    succeed immediately in the timeout case, and all will be
+	    well, as the master Zebra will still be there and will
+	    fork a new worker.  This will of course not succeed if
+	    Zebra has been shut down completely -- but nor it should.
 
 0.09  Tue Jul 11 11:38:32 BST 2006
 	- Add two additional programs to the "bin" directory:
