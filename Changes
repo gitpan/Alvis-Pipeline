@@ -1,6 +1,16 @@
-$Id: Changes,v 1.15 2006/08/14 18:04:04 mike Exp $
+$Id: Changes,v 1.18 2006/08/31 16:14:10 mike Exp $
 
 Revision history for Perl extension Alvis::Pipeline.
+
+0.11  Thu Aug 31 17:13:28 BST 2006
+	- Again, no significant changes to the library, but a major
+	  reworking of the error-handing in alvis-zsink.pl, this time
+	  based on recent fixes in the ZOOM-C part of YAZ.  The
+	  resulting behaviour is the same, but much more robust,
+	  including in the special and nasty case of sending a larger
+	  APDU than the server wants to see.
+	- The alvis-zsink.pl script now requires ZOOM-Perl version
+	  1.11, which in turn needs YAZ 2.1.27.
 
 0.10  Mon Aug 14 19:01:55 BST 2006
 	- No significant changes to the library, but a major reworking
